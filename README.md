@@ -1,13 +1,13 @@
-# Senior Care Agent
+# Senior Care Agent Recipe using LiveKit & Twilio
 
 A voice-enabled AI agent system designed for proactive wellness checks on elderly individuals living alone. Built with LiveKit Agents and OpenAI, this system provides personalized, context-aware conversations through phone calls.
 
 ## Features
 
-- **Automated Phone Calls**: Initiates outbound calls to elderly individuals for wellness checks
+- **Make Phone Calls**: Initiates outbound calls to elderly individuals for wellness checks
 - **Multi-Agent System**: Modular design with specialized agents for different conversation phases
-- **Voice Interaction**: Complete voice-based interaction using speech-to-text and text-to-speech
-- **Identity Verification**: Secure identity confirmation before proceeding with wellness checks
+- **Voice Interaction**: Complete voice-based interaction using speech-to-text and text-to-speech or speech-to-speech using OpenAI Realtime API
+- **Identity Verification**: Simple secure identity confirmation before proceeding with wellness checks
 - **Health Monitoring**: Contextual health status inquiries with conversation history
 - **Emergency Response**: Automatic transfer to human agents during emergencies
 - **Request Logging**: Tracks and logs user concerns for follow-up by care providers
@@ -33,15 +33,31 @@ The system consists of two main agent types:
   - Transfers emergency calls to human agents
   - Properly terminates calls when complete
 
+
+### Project Structure
+```
+senior-care-agent/
+├── agent.py                 # Main agent implementation
+├── realtime_agent.py        # Realtime API variant
+├── make_call.py            # Outbound calling script
+├── utils.py                # Utility functions
+├── prompts/                # Agent instruction templates
+│   ├── intake_prompt.yaml
+│   └── check_in_prompt.yaml
+├── data/                   # Data storage
+│   ├── history/            # Conversation history
+│   └── requests/           # User request logs
+└── pyproject.toml          # Project configuration
+```
+
 ## Technology Stack
 
 - **LiveKit Agents**: Real-time voice communication framework
 - **OpenAI**: GPT-4o-mini for natural language processing
 - **Deepgram**: Speech-to-text conversion
 - **Cartesia**: Text-to-speech synthesis
-- **Silero VAD**: Voice activity detection
+- **Silero VAD, OpenAI's Server VAD / Semantic VAD**: Voice activity detection
 - **SIP Integration**: Phone system connectivity
-- **Python 3.12+**: Core runtime environment
 
 ## Installation
 
@@ -84,8 +100,6 @@ The system consists of two main agent types:
    # Human Agent Phone Number (for emergency transfers)
    HUMAN_AGENT_PHONE=+1234567890
    ```
-   
-   ⚠️ **Security Note**: Never commit your actual `.env` file to version control. The `.env` file is already included in `.gitignore`.
 
 ## Prerequisites & Service Setup
 
@@ -107,10 +121,7 @@ LiveKit provides the real-time communication infrastructure for voice agents.
      - `LIVEKIT_API_SECRET`: Your API secret
 
 3. **Enable SIP Integration**:
-   - In your LiveKit project, navigate to SIP settings
-   - Enable SIP integration for telephony support
-
-📚 **Documentation**: [LiveKit Getting Started](https://docs.livekit.io/realtime/quickstarts/cloud/)
+   - Check from [here](https://docs.livekit.io/sip/quickstarts/configuring-sip-trunk/). You'll need to create `SIP_OUTBOUND_TRUNK_ID` in order to run the agent.
 
 ### Twilio Elastic SIP Trunking Setup
 
@@ -121,70 +132,38 @@ Twilio Elastic SIP Trunking enables the system to make and receive phone calls.
    - Purchase a phone number for outbound calls
 
 2. **Set up Elastic SIP Trunking**:
-   - Navigate to **Elastic SIP Trunking** > **Trunks** in Twilio Console
-   - Create a new SIP Trunk
-   - Configure the trunk with your LiveKit SIP endpoint
+   - Check from [here](https://docs.livekit.io/sip/quickstarts/configuring-twilio-trunk/). 
 
-3. **Configure Outbound Settings**:
-   - In your SIP Trunk settings, add your LiveKit SIP domain to the **Origination** settings
-   - Set up **Termination** URIs to route calls through LiveKit
-   - Configure authentication if required
-
-4. **Get SIP Trunk ID**:
-   - Copy your SIP Trunk SID and add it to your `.env` file as `SIP_OUTBOUND_TRUNK_ID`
-
-5. **Phone Number Configuration**:
-   - Assign your purchased phone number to the SIP trunk
-   - Configure the webhook URLs for incoming calls (if needed)
-
-📚 **Documentation**: 
-- [Twilio Elastic SIP Trunking](https://www.twilio.com/docs/sip-trunking)
-- [LiveKit SIP Integration](https://docs.livekit.io/realtime/server/sip/)
-
-### Additional API Keys
-
-1. **OpenAI API**:
-   - Get your API key from [OpenAI Platform](https://platform.openai.com/api-keys)
-   - Add to `.env` as `OPENAI_API_KEY`
-
-2. **Speech Services** (automatically configured via LiveKit plugins):
-   - **Deepgram**: For speech-to-text
-   - **Cartesia**: For text-to-speech
-   - These are typically configured through LiveKit's plugin system
-
-### Network Configuration
-
-For production deployments, ensure:
-- Proper firewall rules for SIP traffic (typically UDP ports 5060-5080)
-- WebRTC connectivity for LiveKit (STUN/TURN servers if behind NAT)
-- SSL certificates for secure connections
 
 ### Testing Your Setup
 
 After configuration, test your setup:
 
-1. **Verify LiveKit Connection**:
+1. **Download VAD models with this command**
+    ```bash
+    python agent.py download-files
+    ```
+2. **Verify LiveKit Connection**:
    ```bash
-   python agent.py
+   python agent.py dev
    ```
-
-2. **Test Outbound Calling**:
+3. **Test Outbound Calling**:
    ```bash
-   python make_call.py +1234567890
+   python make_call.py +821012345678
    ```
-
-If you encounter issues, check the logs for authentication or connectivity errors.
 
 ## Usage
 
-### Running the Agent Service
+### Running the Agent on LiveKit
 
-Start the voice agent service:
+Start with this command:
 
 ```bash
-python agent.py
+python agent.py dev
 # or for the realtime version
-python realtime_agent.py
+python realtime_agent.py dev
+# or using uv works as well
+uv run agent.py dev
 ```
 
 ### Making Outbound Calls
@@ -236,40 +215,5 @@ Agent behavior is configured through YAML prompt files in the `prompts/` directo
 - `transfer_call_to_human()`: Emergency transfer to human agents
 - `end_call()`: Graceful call termination with history saving
 
-## Security Considerations
-
-⚠️ **Important Security Notes**:
-
-- Current identity verification is demonstration-only (hardcoded names)
-- Production deployments require robust authentication mechanisms
-- Voice recognition accuracy considerations for elderly users
-- Secure handling of personal health information required
-
-## Development
-
-### Project Structure
-```
-senior-care-agent/
-├── agent.py                 # Main agent implementation
-├── realtime_agent.py        # Realtime API variant
-├── make_call.py            # Outbound calling script
-├── utils.py                # Utility functions
-├── prompts/                # Agent instruction templates
-│   ├── intake_prompt.yaml
-│   └── check_in_prompt.yaml
-├── data/                   # Data storage
-│   ├── history/            # Conversation history
-│   └── requests/           # User request logs
-└── pyproject.toml          # Project configuration
-```
-
-### Dependencies
-
-Key dependencies include:
-- `livekit-agents`: Core voice agent framework
-- `livekit-plugins-*`: STT, TTS, and LLM integrations
-- `python-dotenv`: Environment variable management
-- `pyyaml`: YAML configuration parsing
-
 ## License
-MIT
+MIT © Marker-Inc-Korea
