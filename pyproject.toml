@@ -1,0 +1,17 @@
+[project]
+name = "senior-care-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "livekit-agents>=1.0.23",
+    "livekit-plugins-cartesia>=1.0.23",
+    "livekit-plugins-deepgram>=1.0.23",
+    "livekit-plugins-noise-cancellation>=0.2.4",
+    "livekit-plugins-openai>=1.0.23",
+    "livekit-plugins-silero>=1.0.23",
+    "livekit-plugins-turn-detector>=1.0.23",
+    "python-dotenv~=1.0",
+    "pyyaml>=6.0.2",
+]

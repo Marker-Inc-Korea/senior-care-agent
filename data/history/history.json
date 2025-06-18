@@ -1,0 +1,23 @@
+{
+  "last_messages": [
+    {
+      "role": "assistant",
+      "content": [
+        "Ah, that's great, let me know if you have any other requests or needs."
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        "I need something. There's a light bulb out in my house and I can't see the light, can you help?"
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        "I have a visitor. I'll get back to you later. Hang up."
+      ]
+    }
+  ],
+  "note": "Messages of last conversations"
+}
