@@ -272,9 +272,4 @@ Key dependencies include:
 - `pyyaml`: YAML configuration parsing
 
 ## License
-
-This project is licensed under the terms specified in the LICENSE file.
-
-## Contributing
-
-This is a demonstration project for elderly care applications. For production use, please ensure proper security measures, compliance with healthcare regulations, and thorough testing with the target user population.
+MIT
