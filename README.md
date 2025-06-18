@@ -59,15 +59,33 @@ The system consists of two main agent types:
    ```
 
 3. **Environment Setup**:
-   Create a `.env` file with the required API keys and configuration:
+   Copy the example environment file and configure your API keys:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Then edit `.env` with your actual API keys and configuration:
    ```env
-   LIVEKIT_URL=your_livekit_url
-   LIVEKIT_API_KEY=your_api_key
-   LIVEKIT_API_SECRET=your_api_secret
-   OPENAI_API_KEY=your_openai_key
-   SIP_OUTBOUND_TRUNK_ID=your_sip_trunk_id
+   # LiveKit Configuration
+   LIVEKIT_URL=wss://your-project.livekit.cloud
+   LIVEKIT_API_KEY=your_livekit_api_key
+   LIVEKIT_API_SECRET=your_livekit_api_secret
+   
+   # OpenAI Configuration
+   OPENAI_API_KEY=sk-your-openai-api-key
+   
+   # Speech Services
+   CARTESIA_API_KEY=sk_car_your_cartesia_api_key
+   DEEPGRAM_API_KEY=your_deepgram_api_key
+   
+   # Twilio SIP Configuration
+   SIP_OUTBOUND_TRUNK_ID=your_twilio_sip_trunk_id
+   
+   # Human Agent Phone Number (for emergency transfers)
    HUMAN_AGENT_PHONE=+1234567890
    ```
+   
+   ⚠️ **Security Note**: Never commit your actual `.env` file to version control. The `.env` file is already included in `.gitignore`.
 
 ## Prerequisites & Service Setup
 
