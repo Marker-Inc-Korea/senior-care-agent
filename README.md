@@ -2,6 +2,8 @@
 
 A voice-enabled AI agent system designed for proactive wellness checks on elderly individuals living alone. Built with LiveKit Agents and OpenAI, this system provides personalized, context-aware conversations through phone calls.
 
+Read this [blog](https://www.linkedin.com/pulse/livekit%25EA%25B3%25BC-twilio%25EB%25A5%25BC-%25ED%2599%259C%25EC%259A%25A9%25ED%2595%259C-ai-agent%25EB%25A1%259C-%25EB%258F%2585%25EA%25B1%25B0%25EB%2585%25B8%25EC%259D%25B8-%25EC%2595%2588%25EB%25B6%2580%25EC%25A0%2584%25ED%2599%2594-%25EC%259E%2590%25EB%258F%2599%25ED%2599%2594-taeha-lim-yrobc?trackingId=eOwajPJ8SjmcWfvp5uU1qw%3D%3D&lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3B7iov9D32Re%2BvfBcFemCmzA%3D%3D) to see how this went.
+
 ## Features
 
 - **Make Phone Calls**: Initiates outbound calls to elderly individuals for wellness checks
